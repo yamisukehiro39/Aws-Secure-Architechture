@@ -1,0 +1,34 @@
+# Terraform downloads and local working directory
+.terraform/
+
+# Terraform state can contain credentials and other sensitive values
+*.tfstate
+*.tfstate.*
+
+# Plans and crash logs
+*.tfplan
+*.tfplan.json
+crash.log
+crash.*.log
+
+# Local configuration and secret variables
+*.tfvars
+*.tfvars.json
+*.tfbackend
+.env
+.env.*
+*.pem
+*.key
+
+# Terraform override files
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# OS and editor clutter
+.DS_Store
+Thumbs.db
+.vscode/*.log
+
+# NOTE: Do NOT ignore .terraform.lock.hcl. Commit it for reproducible providers.

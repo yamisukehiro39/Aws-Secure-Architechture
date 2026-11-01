@@ -1,0 +1,15 @@
+# Exposes resource identifiers so root modules can connect components safely.
+
+# Module: vpc
+# Purpose: Reusable Virtual Private Cloud definition.
+# File: Outputs.
+
+output "vpc_id" {
+  description = "ID of the created VPC"
+  value       = aws_vpc.this.id
+}
+
+output "vpc_cidr" {
+  description = "CIDR block of the VPC"
+  value       = aws_vpc.this.cidr_block
+}
