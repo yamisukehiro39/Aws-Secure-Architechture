@@ -306,3 +306,18 @@ resource "aws_route" "application_private_to_tgw" {
 
   depends_on = [module.application_tgw_attachment]
 }
+
+# ==============================================================================
+# INTERNET GATEWAY — VPC INSPECTION
+# Attache un Internet Gateway au VPC Inspection.
+# Il permettra la sortie Internet après le Firewall et les NAT Gateway.
+# Les routes vers cet IGW seront configurées dans les tables des subnets NAT.
+# Ce bloc seul ne fournit pas encore un accès Internet.
+# ==============================================================================
+
+module "inspection_igw" {
+  source = "./modules/internet_gateway"
+
+  vpc_id   = module.inspection_vpc.vpc_id
+  igw_name = "aws-lab-inspection-igw"
+}

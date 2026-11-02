@@ -17,3 +17,11 @@ output "inspection_vpc_cidr" {
   description = "Inspection VPC CIDR"
   value       = module.inspection_vpc.vpc_cidr
 }
+
+# Endpoints du Firewall, classés par zone de disponibilité.
+output "firewall_endpoint_ids" {
+  value = {
+    for state in aws_networkfirewall_firewall.inspection.firewall_status[0].sync_states :
+    state.availability_zone => state.attachment[0].endpoint_id
+  }
+}
