@@ -42,9 +42,14 @@ module "application_subnets" {
       az   = "eu-west-3a"
     }
 
-    "private-database" = {
+    "private-database-a" = {
       cidr = "10.0.4.0/24"
       az   = "eu-west-3a"
+    }
+
+    "private-database-b" = {
+      cidr = "10.0.6.0/24"
+      az   = "eu-west-3b"
     }
 
     "application-tgw-a" = {
@@ -100,9 +105,10 @@ module "application_private_routes" {
   vpc_id = module.application_vpc.vpc_id
 
   private_subnet_ids = {
-    "application-web" = module.application_subnets.subnet_ids["private-web"]
-    "application-app" = module.application_subnets.subnet_ids["private-app"]
-    "application-db"  = module.application_subnets.subnet_ids["private-database"]
+    "application-web"  = module.application_subnets.subnet_ids["private-web"]
+    "application-app"  = module.application_subnets.subnet_ids["private-app"]
+    "application-db"   = module.application_subnets.subnet_ids["private-database-a"]
+    "application-db-b" = module.application_subnets.subnet_ids["private-database-b"]
   }
 }
 
