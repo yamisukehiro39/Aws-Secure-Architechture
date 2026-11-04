@@ -42,9 +42,14 @@ module "application_subnets" {
       az   = "eu-west-3a"
     }
 
-    "private-database" = {
+    "private-database-a" = {
       cidr = "10.0.4.0/24"
       az   = "eu-west-3a"
+    }
+
+    "private-database-b" = {
+      cidr = "10.0.6.0/24"
+      az   = "eu-west-3b"
     }
 
     "application-tgw-a" = {
@@ -100,9 +105,10 @@ module "application_private_routes" {
   vpc_id = module.application_vpc.vpc_id
 
   private_subnet_ids = {
-    "application-web" = module.application_subnets.subnet_ids["private-web"]
-    "application-app" = module.application_subnets.subnet_ids["private-app"]
-    "application-db"  = module.application_subnets.subnet_ids["private-database"]
+    "application-web"  = module.application_subnets.subnet_ids["private-web"]
+    "application-app"  = module.application_subnets.subnet_ids["private-app"]
+    "application-db"   = module.application_subnets.subnet_ids["private-database-a"]
+    "application-db-b" = module.application_subnets.subnet_ids["private-database-b"]
   }
 }
 
@@ -305,4 +311,19 @@ resource "aws_route" "application_private_to_tgw" {
   transit_gateway_id     = module.central_tgw.tgw_id
 
   depends_on = [module.application_tgw_attachment]
+}
+
+# ==============================================================================
+# INTERNET GATEWAY — VPC INSPECTION
+# Attache un Internet Gateway au VPC Inspection.
+# Il permettra la sortie Internet après le Firewall et les NAT Gateway.
+# Les routes vers cet IGW seront configurées dans les tables des subnets NAT.
+# Ce bloc seul ne fournit pas encore un accès Internet.
+# ==============================================================================
+
+module "inspection_igw" {
+  source = "./modules/internet_gateway"
+
+  vpc_id   = module.inspection_vpc.vpc_id
+  igw_name = "aws-lab-inspection-igw"
 }
